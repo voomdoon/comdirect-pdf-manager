@@ -39,6 +39,52 @@ class InboxManagerTest {
 		 * @since 0.1.0
 		 */
 		@Nested
+		class GroupTest extends TestBase {
+
+			/**
+			 * @since 0.1.0
+			 */
+			@Test
+			void testFinanzreport_groupByYear_inputFileIsGone() throws Exception {
+				logTestStart();
+
+				File inputFile = new File(getInboxDirectory() + "Finanzreport_2018-02-01.pdf");
+				logger.debug("inputFile: " + inputFile);
+				boolean fileCreated = inputFile.createNewFile();
+				assumeThat(fileCreated).isTrue();
+
+				new InboxManager().run(Path.of(getInboxDirectory()));
+
+				assertThat(inputFile).doesNotExist();
+			}
+
+			/**
+			 * @since 0.1.0
+			 */
+			@Test
+			void testFinanzreport_groupByYear_outputFileExists() throws Exception {
+				logTestStart();
+
+				File inputFile = new File(getInboxDirectory() + "Finanzreport_2018-02-01.pdf");
+				File outputFile = new File(getInboxDirectory() + "2018/Finanzreport_2018-02-01.pdf");
+				logger.debug("inputFile: " + inputFile);
+				boolean fileCreated = inputFile.createNewFile();
+				assumeThat(fileCreated).isTrue();
+
+				new InboxManager().run(Path.of(getInboxDirectory()));
+
+				assertThat(outputFile).exists();
+			}
+		}
+
+		/**
+		 * DOCME add JavaDoc for InboxManagerTest.RunTest
+		 *
+		 * @author André Schulz
+		 *
+		 * @since 0.1.0
+		 */
+		@Nested
 		class RenameTest extends TestBase {
 
 			/**
@@ -65,7 +111,7 @@ class InboxManagerTest {
 				logTestStart();
 
 				File inputFile = new File(getInboxDirectory() + "Finanzreport_Nr._01_per_01.02.2018110579.pdf");
-				File outputFile = new File(getInboxDirectory() + "Finanzreport_2018-02-01.pdf");
+				File outputFile = new File(getInboxDirectory() + "2018/Finanzreport_2018-02-01.pdf");
 				logger.debug("inputFile: " + inputFile);
 				boolean fileCreated = inputFile.createNewFile();
 				assumeThat(fileCreated).isTrue();
@@ -75,6 +121,17 @@ class InboxManagerTest {
 				assertThat(outputFile).exists();
 			}
 
+		}
+
+		/**
+		 * DOCME add JavaDoc for InboxManagerTest.RunTest
+		 *
+		 * @author André Schulz
+		 *
+		 * @since 0.1.0
+		 */
+		private abstract class TestBase extends de.voomdoon.testing.tests.TestBase {
+
 			/**
 			 * DOCME add JavaDoc for method getInboxDirectory
 			 * 
@@ -82,7 +139,7 @@ class InboxManagerTest {
 			 * @throws IOException
 			 * @since 0.1.0
 			 */
-			private String getInboxDirectory() throws IOException {
+			protected String getInboxDirectory() throws IOException {
 				String direcoryName = getTempDirectory() + "/inbox/";
 				new File(direcoryName).mkdirs();
 
