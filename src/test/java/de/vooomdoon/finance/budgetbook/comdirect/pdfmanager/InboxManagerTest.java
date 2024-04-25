@@ -66,7 +66,7 @@ class InboxManagerTest {
 				logTestStart();
 
 				File inputFile = new File(getInboxDirectory() + "Finanzreport_2018-02-01.pdf");
-				File outputFile = new File(getInboxDirectory() + "2018/Finanzreport_2018-02-01.pdf");
+				File outputFile = new File(getInboxDirectory() + "Finanzreport/2018/Finanzreport_2018-02-01.pdf");
 				logger.debug("inputFile: " + inputFile);
 				boolean fileCreated = inputFile.createNewFile();
 				assumeThat(fileCreated).isTrue();
@@ -111,7 +111,7 @@ class InboxManagerTest {
 				logTestStart();
 
 				File inputFile = new File(getInboxDirectory() + "Finanzreport_Nr._01_per_01.02.2018110579.pdf");
-				File outputFile = new File(getInboxDirectory() + "2018/Finanzreport_2018-02-01.pdf");
+				File outputFile = new File(getInboxDirectory() + "Finanzreport/2018/Finanzreport_2018-02-01.pdf");
 				logger.debug("inputFile: " + inputFile);
 				boolean fileCreated = inputFile.createNewFile();
 				assumeThat(fileCreated).isTrue();

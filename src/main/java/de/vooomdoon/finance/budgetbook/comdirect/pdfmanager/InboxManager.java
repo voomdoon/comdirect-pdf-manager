@@ -121,6 +121,8 @@ public class InboxManager {
 		StringBuilder sb = new StringBuilder();
 		sb.append(inboxDirectory);
 		sb.append("/");
+		sb.append(NAME_PREFIX);
+		sb.append("/");
 		sb.append(date.getYear());
 		sb.append("/");
 		sb.append(file.getName());
