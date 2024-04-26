@@ -1,16 +1,14 @@
 package de.vooomdoon.finance.budgetbook.comdirect.pdfmanager;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assumptions.assumeThat;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Path;
 
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import de.voomdoon.testing.tests.TestBase;
+import de.vooomdoon.finance.budgetbook.comdirect.pdfmanager.test.TestBase;
 
 /**
  * DOCME add JavaDoc for
@@ -145,44 +143,6 @@ class InboxManagerTest {
 				new InboxManager().run(Path.of(getInboxDirectory()));
 
 				assertThat(outputFile).exists();
-			}
-		}
-
-		/**
-		 * DOCME add JavaDoc for InboxManagerTest.RunTest
-		 *
-		 * @author André Schulz
-		 *
-		 * @since 0.1.0
-		 */
-		private abstract class TestBase extends de.voomdoon.testing.tests.TestBase {
-
-			/**
-			 * DOCME add JavaDoc for method createNewFile
-			 * 
-			 * @param file
-			 * @return
-			 * @throws IOException
-			 * @since DOCME add inception version number
-			 */
-			protected void createNewFileWithDirectory(File file) throws IOException {
-				file.getParentFile().mkdirs();
-				boolean fileCreated = file.createNewFile();
-				assumeThat(fileCreated).isTrue();
-			}
-
-			/**
-			 * DOCME add JavaDoc for method getInboxDirectory
-			 * 
-			 * @return
-			 * @throws IOException
-			 * @since 0.1.0
-			 */
-			protected String getInboxDirectory() throws IOException {
-				String direcoryName = getTempDirectory() + "/inbox/";
-				new File(direcoryName).mkdirs();
-
-				return direcoryName;
 			}
 		}
 	}
