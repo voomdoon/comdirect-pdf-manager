@@ -26,7 +26,7 @@ public class InboxManager {
 	 * @since 0.1.0
 	 */
 	private static final Pattern FINANZREPORT_INPUT_PATTERN = Pattern
-			.compile("Finanzreport_Nr\\._\\d{2}_(per|vom)_(?<date>\\d{2}\\.\\d{2}\\.\\d{4})_?\\w{6}\\.pdf");
+			.compile("Finanzreport_?Nr\\._?\\d{1,3}_?(per|vom)_?(?<date>\\d{2}\\.\\d{2}\\.\\d{4})_?\\w{6}\\.pdf");
 
 	/**
 	 * @since 0.1.0
