@@ -49,9 +49,7 @@ class InboxManagerTest {
 				logTestStart();
 
 				File inputFile = new File(getInboxDirectory() + "Finanzreport_2018-02-01.pdf");
-				logger.debug("inputFile: " + inputFile);
-				boolean fileCreated = inputFile.createNewFile();
-				assumeThat(fileCreated).isTrue();
+				createNewFileWithDirectory(inputFile);
 
 				new InboxManager().run(Path.of(getInboxDirectory()));
 
@@ -67,9 +65,7 @@ class InboxManagerTest {
 
 				File inputFile = new File(getInboxDirectory() + "Finanzreport_2018-02-01.pdf");
 				File outputFile = new File(getInboxDirectory() + "Finanzreport/2018/Finanzreport_2018-02-01.pdf");
-				logger.debug("inputFile: " + inputFile);
-				boolean fileCreated = inputFile.createNewFile();
-				assumeThat(fileCreated).isTrue();
+				createNewFileWithDirectory(inputFile);
 
 				new InboxManager().run(Path.of(getInboxDirectory()));
 
@@ -91,12 +87,11 @@ class InboxManagerTest {
 			 * @since 0.1.0
 			 */
 			@Test
-			void testFinanzreport_inputFileIsGone() throws Exception {
+			void testFinanzreport_atRoot_inputFileIsGone() throws Exception {
 				logTestStart();
 
 				File inputFile = new File(getInboxDirectory() + "Finanzreport_Nr._01_per_01.02.2018110579.pdf");
-				boolean fileCreated = inputFile.createNewFile();
-				assumeThat(fileCreated).isTrue();
+				createNewFileWithDirectory(inputFile);
 
 				new InboxManager().run(Path.of(getInboxDirectory()));
 
@@ -107,20 +102,17 @@ class InboxManagerTest {
 			 * @since 0.1.0
 			 */
 			@Test
-			void testFinanzreport_outputFileExists() throws Exception {
+			void testFinanzreport_atRoot_outputFileExists() throws Exception {
 				logTestStart();
 
 				File inputFile = new File(getInboxDirectory() + "Finanzreport_Nr._01_per_01.02.2018110579.pdf");
 				File outputFile = new File(getInboxDirectory() + "Finanzreport/2018/Finanzreport_2018-02-01.pdf");
-				logger.debug("inputFile: " + inputFile);
-				boolean fileCreated = inputFile.createNewFile();
-				assumeThat(fileCreated).isTrue();
+				createNewFileWithDirectory(inputFile);
 
 				new InboxManager().run(Path.of(getInboxDirectory()));
 
 				assertThat(outputFile).exists();
 			}
-
 		}
 
 		/**
@@ -131,6 +123,20 @@ class InboxManagerTest {
 		 * @since 0.1.0
 		 */
 		private abstract class TestBase extends de.voomdoon.testing.tests.TestBase {
+
+			/**
+			 * DOCME add JavaDoc for method createNewFile
+			 * 
+			 * @param file
+			 * @return
+			 * @throws IOException
+			 * @since DOCME add inception version number
+			 */
+			protected void createNewFileWithDirectory(File file) throws IOException {
+				file.getParentFile().mkdirs();
+				boolean fileCreated = file.createNewFile();
+				assumeThat(fileCreated).isTrue();
+			}
 
 			/**
 			 * DOCME add JavaDoc for method getInboxDirectory
