@@ -152,7 +152,8 @@ class InboxManagerTest {
 			 */
 			@ParameterizedTest
 			@ValueSource(strings = { "Finanzreport_Nr._01_per_01.02.2018110579.pdf",
-					"Finanzreport_Nr._01_per_01.02.2018A1057B.pdf", "Finanzreport_Nr._01_per_01.02.2018_A1057B.pdf" })
+					"Finanzreport_Nr._01_per_01.02.2018A1057B.pdf", "Finanzreport_Nr._01_per_01.02.2018_A1057B.pdf",
+					"Finanzreport_Nr._01_vom_01.02.2018110579.pdf" })
 			void testFinanzreport_atTargetDirectory_outputFileExists(String fileName) throws Exception {
 				logTestStart();
 
