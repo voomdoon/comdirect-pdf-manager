@@ -64,7 +64,7 @@ public class InboxManager {
 	public void run(Path inboxDirectory) throws IOException {
 		logger.debug("run " + inboxDirectory);
 
-		ensureFileNames(inboxDirectory);
+		ensureFileNames(inboxDirectory.toFile());
 
 		groupFiles(inboxDirectory);
 	}
@@ -95,12 +95,16 @@ public class InboxManager {
 	}
 
 	/**
-	 * @param inboxDirectory
+	 * @param directory
 	 * @since 0.1.0
 	 */
-	private void ensureFileNames(Path inboxDirectory) {
-		for (File file : inboxDirectory.toFile().listFiles()) {
-			ensureFileName(file);
+	private void ensureFileNames(File directory) {
+		for (File file : directory.listFiles()) {
+			if (file.isDirectory()) {
+				ensureFileNames(file);
+			} else {
+				ensureFileName(file);
+			}
 		}
 	}
 
