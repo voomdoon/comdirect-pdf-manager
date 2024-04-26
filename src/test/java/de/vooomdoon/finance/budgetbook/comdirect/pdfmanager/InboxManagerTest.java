@@ -82,6 +82,23 @@ class InboxManagerTest {
 		class RenameTest extends TestBase {
 
 			/**
+			 * DOCME add JavaDoc for method test_ignoreOtherFiles
+			 * 
+			 * @since 0.1.0
+			 */
+			@Test
+			void test_ignoreOtherFiles() throws Exception {
+				logTestStart();
+
+				File ignoredFile = new File(getInboxDirectory() + "something_per_01.02.2018110579.pdf");
+				createNewFileWithDirectory(ignoredFile);
+
+				new InboxManager().run(Path.of(getInboxDirectory()));
+
+				assertThat(ignoredFile).exists();
+			}
+
+			/**
 			 * @since 0.1.0
 			 */
 			@Test

@@ -7,6 +7,8 @@ import java.nio.file.Path;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import de.voomdoon.logging.LogManager;
 import de.voomdoon.logging.Logger;
@@ -19,6 +21,18 @@ import de.voomdoon.logging.Logger;
  * @since 0.1.0
  */
 public class InboxManager {
+
+	/**
+	 * @since 0.1.0
+	 */
+	private static final Pattern FINANZREPORT_INPUT_PATTERN = Pattern
+			.compile("Finanzreport_Nr\\._\\d{2}_per_(?<date>\\d{2}\\.\\d{2}\\.\\d{4})\\d{6}\\.pdf");
+
+	/**
+	 * @since 0.1.0
+	 */
+	private static final Pattern FINANZREPORT_OUTPUT_PATTERN = Pattern
+			.compile("Finanzreport_(?<date>\\d{4}-\\d{2}-\\d{2}).pdf");
 
 	/**
 	 * @since 0.1.0
@@ -43,10 +57,7 @@ public class InboxManager {
 	 * @since 0.1.0
 	 */
 	private static LocalDate parseInputDate(String name) {
-		int start = name.indexOf("per_") + 4;
-		int end = start + 10;
-
-		return LocalDate.parse(name.substring(start, end), INPUT_DATE_TIME_FORMATTER);
+		return LocalDate.parse(name, INPUT_DATE_TIME_FORMATTER);
 	}
 
 	/**
@@ -76,22 +87,12 @@ public class InboxManager {
 	 * @since 0.1.0
 	 */
 	private void ensureFileName(File inputFile) {
-		logger.debug("ensureFileName " + inputFile);
-
-		if (!inputFile.getName().contains("per")) {
-			return;
+		if (FINANZREPORT_INPUT_PATTERN.matcher(inputFile.getName()).matches()
+				|| FINANZREPORT_OUTPUT_PATTERN.matcher(inputFile.getName()).matches()) {
+			ensureFinanzreportFileName(inputFile);
+		} else {
+			logger.trace("ensureFileName: ignore " + inputFile);
 		}
-
-		StringBuilder sb = new StringBuilder();
-		sb.append(NAME_PREFIX).append("_");
-		sb.append(parseInputDate(inputFile.getName()).format(OUTPUT_DATE_TIME_FORMATTER));
-		sb.append(".pdf");
-
-		File outputFile = new File(inputFile.getParentFile(), sb.toString());
-		logger.debug("outputFile: " + outputFile);
-
-		boolean success = inputFile.renameTo(outputFile);
-		logger.debug("success: " + success);
 	}
 
 	/**
@@ -109,6 +110,51 @@ public class InboxManager {
 	}
 
 	/**
+	 * DOCME add JavaDoc for method ensureFinanzreportFileName
+	 * 
+	 * @param inputFile
+	 * @since 0.1.0
+	 */
+	private void ensureFinanzreportFileName(File inputFile) {
+		logger.debug("ensureFileName " + inputFile);
+
+		StringBuilder sb = new StringBuilder();
+		sb.append(NAME_PREFIX).append("_");
+		sb.append(getDate(inputFile.getName()).format(OUTPUT_DATE_TIME_FORMATTER));
+		sb.append(".pdf");
+
+		File outputFile = new File(inputFile.getParentFile(), sb.toString());
+		logger.debug("outputFile: " + outputFile);
+
+		boolean success = inputFile.renameTo(outputFile);
+		logger.debug("success: " + success);
+	}
+
+	/**
+	 * DOCME add JavaDoc for method getDate
+	 * 
+	 * @param fileName
+	 * @return
+	 * @since 0.1.0
+	 */
+	private LocalDate getDate(String fileName) {
+		Matcher matcher = FINANZREPORT_INPUT_PATTERN.matcher(fileName);
+
+		if (matcher.matches()) {
+			return parseInputDate(matcher.group("date"));
+		}
+
+		matcher = FINANZREPORT_OUTPUT_PATTERN.matcher(fileName);
+
+		if (matcher.matches()) {
+			return parseOutputDate(matcher.group("date"));
+		}
+
+		// TODO implement getDate
+		throw new UnsupportedOperationException("'getDate' not implemented for '" + fileName + "'");
+	}
+
+	/**
 	 * DOCME add JavaDoc for method getOutputFileName
 	 * 
 	 * @param file
@@ -117,9 +163,7 @@ public class InboxManager {
 	 * @since 0.1.0
 	 */
 	private String getOutputFileName(File file, Path inboxDirectory) {
-		int start = file.getName().indexOf("_") + 1;
-		int end = file.getName().indexOf(".pdf");
-		LocalDate date = parseOutputDate(file.getName().substring(start, end));
+		LocalDate date = getDate(file.getName());
 		logger.debug("date: " + date);
 
 		StringBuilder sb = new StringBuilder();
@@ -150,7 +194,7 @@ public class InboxManager {
 		File outputFile = new File(outputFileName);
 		outputFile.getParentFile().mkdirs();
 
-		Files.move(file.getAbsoluteFile().toPath(), outputFile.getAbsoluteFile().toPath());
+		move(file, outputFile);
 	}
 
 	/**
@@ -166,6 +210,20 @@ public class InboxManager {
 
 		for (File file : files) {
 			groupFile(file, inboxDirectory);
+		}
+	}
+
+	/**
+	 * DOCME add JavaDoc for method move
+	 * 
+	 * @param source
+	 * @param target
+	 * @throws IOException
+	 * @since 0.1.0
+	 */
+	private void move(File source, File target) throws IOException {
+		if (!target.equals(source)) {
+			Files.move(source.getAbsoluteFile().toPath(), target.getAbsoluteFile().toPath());
 		}
 	}
 
