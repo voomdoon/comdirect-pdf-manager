@@ -7,6 +7,8 @@ import java.nio.file.Path;
 
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import de.vooomdoon.finance.budgetbook.comdirect.pdfmanager.test.TestBase;
 
@@ -148,12 +150,13 @@ class InboxManagerTest {
 			/**
 			 * @since 0.1.0
 			 */
-			@Test
-			void testFinanzreport_atTargetDirectory_outputFileExists() throws Exception {
+			@ParameterizedTest
+			@ValueSource(strings = { "Finanzreport_Nr._01_per_01.02.2018110579.pdf",
+					"Finanzreport_Nr._01_per_01.02.2018A1057B.pdf", "Finanzreport_Nr._01_per_01.02.2018_A1057B.pdf" })
+			void testFinanzreport_atTargetDirectory_outputFileExists(String fileName) throws Exception {
 				logTestStart();
 
-				File inputFile = new File(
-						getInboxDirectory() + "Finanzreport/2018/Finanzreport_Nr._01_per_01.02.2018110579.pdf");
+				File inputFile = new File(getInboxDirectory() + "Finanzreport/2018/" + fileName);
 				File outputFile = new File(getInboxDirectory() + "Finanzreport/2018/Finanzreport_2018-02-01.pdf");
 				createNewFileWithDirectory(inputFile);
 
