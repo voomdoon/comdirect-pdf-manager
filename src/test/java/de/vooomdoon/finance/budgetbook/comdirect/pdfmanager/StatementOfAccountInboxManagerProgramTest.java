@@ -10,16 +10,16 @@ import org.junit.jupiter.api.Test;
 import de.vooomdoon.finance.budgetbook.comdirect.pdfmanager.test.TestBase;
 
 /**
- * Test class for {@link InboxManagerProgram}.
+ * Test class for {@link StatementOfAccountInboxManagerProgram}.
  *
  * @author André Schulz
  *
  * @since 0.1.0
  */
-class InboxManagerProgramTest {
+class StatementOfAccountInboxManagerProgramTest {
 
 	/**
-	 * Test class for {@link InboxManagerProgram#main(String[])}.
+	 * Test class for {@link StatementOfAccountInboxManagerProgram#main(String[])}.
 	 *
 	 * @author André Schulz
 	 *
@@ -39,7 +39,7 @@ class InboxManagerProgramTest {
 			File outputFile = new File(getInboxDirectory() + "Finanzreport/2018/Finanzreport_2018-02-01.pdf");
 			createNewFileWithDirectory(inputFile);
 
-			InboxManagerProgram.main(new String[] { getInboxDirectory() });
+			StatementOfAccountInboxManagerProgram.main(new String[] { getInboxDirectory() });
 
 			assertThat(outputFile).exists();
 		}

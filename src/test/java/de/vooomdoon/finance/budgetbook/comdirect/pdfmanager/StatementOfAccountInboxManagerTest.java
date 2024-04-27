@@ -19,7 +19,7 @@ import de.vooomdoon.finance.budgetbook.comdirect.pdfmanager.test.TestBase;
  *
  * @since 0.1.0
  */
-class InboxManagerTest {
+class StatementOfAccountInboxManagerTest {
 
 	/**
 	 * DOCME add JavaDoc for InboxManagerTest
@@ -51,7 +51,7 @@ class InboxManagerTest {
 				File inputFile = new File(getInboxDirectory() + "Finanzreport_2018-02-01.pdf");
 				createNewFileWithDirectory(inputFile);
 
-				new InboxManager().run(Path.of(getInboxDirectory()));
+				new StatementOfAccountInboxManager().run(Path.of(getInboxDirectory()));
 
 				assertThat(inputFile).doesNotExist();
 			}
@@ -67,7 +67,7 @@ class InboxManagerTest {
 				File outputFile = new File(getInboxDirectory() + "Finanzreport/2018/Finanzreport_2018-02-01.pdf");
 				createNewFileWithDirectory(inputFile);
 
-				new InboxManager().run(Path.of(getInboxDirectory()));
+				new StatementOfAccountInboxManager().run(Path.of(getInboxDirectory()));
 
 				assertThat(outputFile).exists();
 			}
@@ -95,7 +95,7 @@ class InboxManagerTest {
 				File ignoredFile = new File(getInboxDirectory() + "something_per_01.02.2018110579.pdf");
 				createNewFileWithDirectory(ignoredFile);
 
-				new InboxManager().run(Path.of(getInboxDirectory()));
+				new StatementOfAccountInboxManager().run(Path.of(getInboxDirectory()));
 
 				assertThat(ignoredFile).exists();
 			}
@@ -110,7 +110,7 @@ class InboxManagerTest {
 				File inputFile = new File(getInboxDirectory() + "Finanzreport_Nr._01_per_01.02.2018110579.pdf");
 				createNewFileWithDirectory(inputFile);
 
-				new InboxManager().run(Path.of(getInboxDirectory()));
+				new StatementOfAccountInboxManager().run(Path.of(getInboxDirectory()));
 
 				assertThat(inputFile).doesNotExist();
 			}
@@ -126,7 +126,7 @@ class InboxManagerTest {
 				File outputFile = new File(getInboxDirectory() + "Finanzreport/2018/Finanzreport_2018-02-01.pdf");
 				createNewFileWithDirectory(inputFile);
 
-				new InboxManager().run(Path.of(getInboxDirectory()));
+				new StatementOfAccountInboxManager().run(Path.of(getInboxDirectory()));
 
 				assertThat(outputFile).exists();
 			}
@@ -142,7 +142,7 @@ class InboxManagerTest {
 						getInboxDirectory() + "Finanzreport/2018/Finanzreport_Nr._01_per_01.02.2018110579.pdf");
 				createNewFileWithDirectory(inputFile);
 
-				new InboxManager().run(Path.of(getInboxDirectory()));
+				new StatementOfAccountInboxManager().run(Path.of(getInboxDirectory()));
 
 				assertThat(inputFile).doesNotExist();
 			}
@@ -163,7 +163,7 @@ class InboxManagerTest {
 				File outputFile = new File(getInboxDirectory() + "Finanzreport/2018/Finanzreport_2018-02-01.pdf");
 				createNewFileWithDirectory(inputFile);
 
-				new InboxManager().run(Path.of(getInboxDirectory()));
+				new StatementOfAccountInboxManager().run(Path.of(getInboxDirectory()));
 
 				assertThat(outputFile).exists();
 			}

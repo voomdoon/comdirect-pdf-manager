@@ -20,7 +20,7 @@ import de.voomdoon.logging.Logger;
  *
  * @since 0.1.0
  */
-public class InboxManager {
+public class StatementOfAccountInboxManager {
 
 	/**
 	 * @since 0.1.0

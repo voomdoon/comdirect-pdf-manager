@@ -11,7 +11,7 @@ import de.voomdoon.util.cli.Program;
  *
  * @since 0.1.0
  */
-public class InboxManagerProgram extends Program {
+public class StatementOfAccountInboxManagerProgram extends Program {
 
 	/**
 	 * @param args
@@ -26,6 +26,6 @@ public class InboxManagerProgram extends Program {
 	 */
 	@Override
 	protected void run() throws Exception {
-		new InboxManager().run(Path.of(pollArg("inbox-directory")));
+		new StatementOfAccountInboxManager().run(Path.of(pollArg("inbox-directory")));
 	}
 }
