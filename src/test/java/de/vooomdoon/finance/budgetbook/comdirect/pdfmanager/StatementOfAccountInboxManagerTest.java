@@ -7,9 +7,11 @@ import java.nio.file.Path;
 
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
+import org.junit.jupiter.api.extension.ExtendWith;
 
+import de.voomdoon.testing.file.TempFileExtension;
+import de.voomdoon.testing.file.TempInputDirectory;
+import de.voomdoon.testing.file.WithTempInputDirectories;
 import de.vooomdoon.finance.budgetbook.comdirect.pdfmanager.test.TestBase;
 
 /**
@@ -39,19 +41,22 @@ class StatementOfAccountInboxManagerTest {
 		 * @since 0.1.0
 		 */
 		@Nested
+		@ExtendWith(TempFileExtension.class)
+		@WithTempInputDirectories(create = true)
 		class GroupTest extends TestBase {
 
 			/**
 			 * @since 0.1.0
 			 */
 			@Test
-			void testFinanzreport_groupByYear_inputFileIsGone() throws Exception {
+			void testFinanzreport_groupByYear_inputFileIsGone(@TempInputDirectory String inputDirectory)
+					throws Exception {
 				logTestStart();
 
-				File inputFile = new File(getInboxDirectory() + "Finanzreport_2018-02-01.pdf");
+				File inputFile = new File(inputDirectory + "/Finanzreport_2018-02-01.pdf");
 				createNewFileWithDirectory(inputFile);
 
-				new StatementOfAccountInboxManager().run(Path.of(getInboxDirectory()));
+				new StatementOfAccountInboxManager().run(Path.of(inputDirectory));
 
 				assertThat(inputFile).doesNotExist();
 			}
@@ -60,14 +65,15 @@ class StatementOfAccountInboxManagerTest {
 			 * @since 0.1.0
 			 */
 			@Test
-			void testFinanzreport_groupByYear_outputFileExists() throws Exception {
+			void testFinanzreport_groupByYear_outputFileExists(@TempInputDirectory String inputDirectory)
+					throws Exception {
 				logTestStart();
 
-				File inputFile = new File(getInboxDirectory() + "Finanzreport_2018-02-01.pdf");
-				File outputFile = new File(getInboxDirectory() + "Finanzreport/2018/Finanzreport_2018-02-01.pdf");
+				File inputFile = new File(inputDirectory + "/Finanzreport_2018-02-01.pdf");
+				File outputFile = new File(inputDirectory + "/Finanzreport/2018/Finanzreport_2018-02-01.pdf");
 				createNewFileWithDirectory(inputFile);
 
-				new StatementOfAccountInboxManager().run(Path.of(getInboxDirectory()));
+				new StatementOfAccountInboxManager().run(Path.of(inputDirectory));
 
 				assertThat(outputFile).exists();
 			}
@@ -81,6 +87,8 @@ class StatementOfAccountInboxManagerTest {
 		 * @since 0.1.0
 		 */
 		@Nested
+		@ExtendWith(TempFileExtension.class)
+		@WithTempInputDirectories(create = true)
 		class RenameTest extends TestBase {
 
 			/**
@@ -89,13 +97,13 @@ class StatementOfAccountInboxManagerTest {
 			 * @since 0.1.0
 			 */
 			@Test
-			void test_ignoreOtherFiles() throws Exception {
+			void test_ignoreOtherFiles(@TempInputDirectory String inputDirectory) throws Exception {
 				logTestStart();
 
-				File ignoredFile = new File(getInboxDirectory() + "something_per_01.02.2018110579.pdf");
+				File ignoredFile = new File(inputDirectory + "/something_per_01.02.2018110579.pdf");
 				createNewFileWithDirectory(ignoredFile);
 
-				new StatementOfAccountInboxManager().run(Path.of(getInboxDirectory()));
+				new StatementOfAccountInboxManager().run(Path.of(inputDirectory));
 
 				assertThat(ignoredFile).exists();
 			}
@@ -104,13 +112,13 @@ class StatementOfAccountInboxManagerTest {
 			 * @since 0.1.0
 			 */
 			@Test
-			void testFinanzreport_atRoot_inputFileIsGone() throws Exception {
+			void testFinanzreport_atRoot_inputFileIsGone(@TempInputDirectory String inputDirectory) throws Exception {
 				logTestStart();
 
-				File inputFile = new File(getInboxDirectory() + "Finanzreport_Nr._01_per_01.02.2018110579.pdf");
+				File inputFile = new File(inputDirectory + "/Finanzreport_Nr._01_per_01.02.2018110579.pdf");
 				createNewFileWithDirectory(inputFile);
 
-				new StatementOfAccountInboxManager().run(Path.of(getInboxDirectory()));
+				new StatementOfAccountInboxManager().run(Path.of(inputDirectory));
 
 				assertThat(inputFile).doesNotExist();
 			}
@@ -119,14 +127,14 @@ class StatementOfAccountInboxManagerTest {
 			 * @since 0.1.0
 			 */
 			@Test
-			void testFinanzreport_atRoot_outputFileExists() throws Exception {
+			void testFinanzreport_atRoot_outputFileExists(@TempInputDirectory String inputDirectory) throws Exception {
 				logTestStart();
 
-				File inputFile = new File(getInboxDirectory() + "Finanzreport_Nr._01_per_01.02.2018110579.pdf");
-				File outputFile = new File(getInboxDirectory() + "Finanzreport/2018/Finanzreport_2018-02-01.pdf");
+				File inputFile = new File(inputDirectory + "/Finanzreport_Nr._01_per_01.02.2018110579.pdf");
+				File outputFile = new File(inputDirectory + "/Finanzreport/2018/Finanzreport_2018-02-01.pdf");
 				createNewFileWithDirectory(inputFile);
 
-				new StatementOfAccountInboxManager().run(Path.of(getInboxDirectory()));
+				new StatementOfAccountInboxManager().run(Path.of(inputDirectory));
 
 				assertThat(outputFile).exists();
 			}
@@ -135,14 +143,15 @@ class StatementOfAccountInboxManagerTest {
 			 * @since 0.1.0
 			 */
 			@Test
-			void testFinanzreport_atTargetDirectory_inputFileIsGone() throws Exception {
+			void testFinanzreport_atTargetDirectory_inputFileIsGone(@TempInputDirectory String inputDirectory)
+					throws Exception {
 				logTestStart();
 
 				File inputFile = new File(
-						getInboxDirectory() + "Finanzreport/2018/Finanzreport_Nr._01_per_01.02.2018110579.pdf");
+						inputDirectory + "/Finanzreport/2018/Finanzreport_Nr._01_per_01.02.2018110579.pdf");
 				createNewFileWithDirectory(inputFile);
 
-				new StatementOfAccountInboxManager().run(Path.of(getInboxDirectory()));
+				new StatementOfAccountInboxManager().run(Path.of(inputDirectory));
 
 				assertThat(inputFile).doesNotExist();
 			}
@@ -150,20 +159,21 @@ class StatementOfAccountInboxManagerTest {
 			/**
 			 * @since 0.1.0
 			 */
-			@ParameterizedTest
-			@ValueSource(strings = { "Finanzreport_Nr._01_per_01.02.2018110579.pdf",
+			@org.junit.jupiter.params.ParameterizedTest
+			@org.junit.jupiter.params.provider.ValueSource(strings = { "Finanzreport_Nr._01_per_01.02.2018110579.pdf",
 					"Finanzreport_Nr._01_per_01.02.2018A1057B.pdf", "Finanzreport_Nr._01_per_01.02.2018_A1057B.pdf",
 					"Finanzreport_Nr._01_vom_01.02.2018110579.pdf", "Finanzreport_Nr.01_vom_01.02.2018110579.pdf",
 					"Finanzreport_Nr.1_vom_01.02.2018110579.pdf", "Finanzreport_Nr.001_vom_01.02.2018110579.pdf",
 					"Finanzreport_Nr.01vom01.02.2018110579.pdf", "FinanzreportNr.01vom01.02.2018110579.pdf" })
-			void testFinanzreport_atTargetDirectory_outputFileExists(String fileName) throws Exception {
+			void testFinanzreport_atTargetDirectory_outputFileExists(String fileName,
+					@TempInputDirectory String inputDirectory) throws Exception {
 				logTestStart();
 
-				File inputFile = new File(getInboxDirectory() + "Finanzreport/2018/" + fileName);
-				File outputFile = new File(getInboxDirectory() + "Finanzreport/2018/Finanzreport_2018-02-01.pdf");
+				File inputFile = new File(inputDirectory + "/Finanzreport/2018/" + fileName);
+				File outputFile = new File(inputDirectory + "/Finanzreport/2018/Finanzreport_2018-02-01.pdf");
 				createNewFileWithDirectory(inputFile);
 
-				new StatementOfAccountInboxManager().run(Path.of(getInboxDirectory()));
+				new StatementOfAccountInboxManager().run(Path.of(inputDirectory));
 
 				assertThat(outputFile).exists();
 			}

@@ -27,18 +27,4 @@ public abstract class TestBase extends de.voomdoon.testing.tests.TestBase {
 		boolean fileCreated = file.createNewFile();
 		assumeThat(fileCreated).isTrue();
 	}
-
-	/**
-	 * DOCME add JavaDoc for method getInboxDirectory
-	 * 
-	 * @return
-	 * @throws IOException
-	 * @since 0.1.0
-	 */
-	protected String getInboxDirectory() throws IOException {
-		String direcoryName = getTempDirectory() + "/inbox/";
-		new File(direcoryName).mkdirs();
-
-		return direcoryName;
-	}
 }
